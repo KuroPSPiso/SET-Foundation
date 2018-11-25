@@ -1,11 +1,11 @@
-package com.capgemini.UNO;
+package com.capgemini.cardgame.blackjack;
 
 import com.capgemini.calendar.CalendarFormatting;
 import com.sun.deploy.util.StringUtils;
 
 import java.util.Scanner;
 
-public class Main_UNO {
+public class Main_BlackJack {
 
     public static void main(String[] args) {
         //Data collection from io stream
