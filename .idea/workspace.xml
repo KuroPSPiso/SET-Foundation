@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e847c3fc-0601-47dc-b0f5-c5f135ae0981" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/com/capgemini/cardgame/cardset/Card.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/capgemini/cardgame/cardset/CardType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/capgemini/cardgame/cardset/CardIndex.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/capgemini/supermarket/payment/Currency.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/capgemini/supermarket/payment/Currency.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/capgemini/cardgame/blackjack/Main_BlackJack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/capgemini/cardgame/blackjack/Main_BlackJack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/capgemini/cardgame/cardset/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/capgemini/cardgame/cardset/Card.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -63,44 +63,59 @@
         <counts>
           <entry key="class" value="1" />
           <entry key="iml" value="1" />
-          <entry key="java" value="7" />
+          <entry key="java" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="1" />
           <entry key="IDEA_MODULE" value="1" />
-          <entry key="JAVA" value="7" />
+          <entry key="JAVA" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="1967" />
+          <entry key="java" value="2301" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="1967" />
+          <entry key="JAVA" value="2301" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/capgemini/cardgame/blackjack/Main_BlackJack.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="43" column="5" lean-forward="true" selection-start-line="43" selection-start-column="5" selection-end-line="43" selection-end-column="5" />
+            <state relative-caret-position="136">
+              <caret line="12" column="5" lean-forward="true" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/capgemini/cardgame/cardset/Card.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="22" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
+            <state relative-caret-position="289">
+              <caret line="17" column="5" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
+              <folding>
+                <element signature="e#279#280#0" expanded="true" />
+                <element signature="e#310#311#0" expanded="true" />
+                <element signature="e#439#440#0" expanded="true" />
+                <element signature="e#471#472#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/capgemini/cardgame/cardset/CardIndex.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
             </state>
           </provider>
         </entry>
@@ -200,17 +215,6 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/out/production/DesktopCalendar/com/capgemini/Calendar/Main_Calendar.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <folding>
-                <element signature="e#0#1188#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -245,9 +249,10 @@
         <option value="$PROJECT_DIR$/src/com/capgemini/supermarket/Main_Supermarket.java" />
         <option value="$PROJECT_DIR$/src/com/capgemini/supermarket/stock/Product.java" />
         <option value="$PROJECT_DIR$/src/com/capgemini/supermarket/payment/Currency.java" />
-        <option value="$PROJECT_DIR$/src/com/capgemini/cardgame/blackjack/Main_BlackJack.java" />
         <option value="$PROJECT_DIR$/src/com/capgemini/cardgame/cardset/CardType.java" />
+        <option value="$PROJECT_DIR$/src/com/capgemini/cardgame/cardset/CardIndex.java" />
         <option value="$PROJECT_DIR$/src/com/capgemini/cardgame/cardset/Card.java" />
+        <option value="$PROJECT_DIR$/src/com/capgemini/cardgame/blackjack/Main_BlackJack.java" />
       </list>
     </option>
   </component>
@@ -345,7 +350,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543169587402" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543169984987" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
@@ -400,12 +405,12 @@
       <workItem from="1542879855742" duration="11781000" />
       <workItem from="1542975818113" duration="4821000" />
       <workItem from="1543161355489" duration="613000" />
-      <workItem from="1543162084121" duration="4192000" />
+      <workItem from="1543162084121" duration="4586000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21407000" />
+    <option name="totallyTimeSpent" value="21801000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -591,13 +596,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/capgemini/cardgame/blackjack/Main_BlackJack.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="43" column="5" lean-forward="true" selection-start-line="43" selection-start-column="5" selection-end-line="43" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/capgemini/cardgame/cardset/CardType.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
@@ -611,10 +609,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/capgemini/cardgame/cardset/CardIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/capgemini/cardgame/cardset/Card.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="22" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
+        <state relative-caret-position="289">
+          <caret line="17" column="5" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
+          <folding>
+            <element signature="e#279#280#0" expanded="true" />
+            <element signature="e#310#311#0" expanded="true" />
+            <element signature="e#439#440#0" expanded="true" />
+            <element signature="e#471#472#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/capgemini/cardgame/blackjack/Main_BlackJack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="12" column="5" lean-forward="true" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
         </state>
       </provider>
     </entry>

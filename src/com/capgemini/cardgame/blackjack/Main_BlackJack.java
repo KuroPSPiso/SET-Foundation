@@ -1,11 +1,17 @@
 package com.capgemini.cardgame.blackjack;
 
 import com.capgemini.calendar.CalendarFormatting;
+import com.capgemini.cardgame.cardset.Card;
 import com.sun.deploy.util.StringUtils;
 
 import java.util.Scanner;
 
 public class Main_BlackJack {
+
+    public static final Card[] blackJackDeck = {
+
+    };
+
 
     public static void main(String[] args) {
         //Data collection from io stream
