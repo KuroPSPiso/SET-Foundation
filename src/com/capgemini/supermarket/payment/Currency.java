@@ -4,18 +4,20 @@ package com.capgemini.supermarket.payment;
  * For this example currency is only EUROS are used when referring to currency.
  */
 public class Currency {
+
+    public static final Currency Zero = new Currency(0);
     private long value;
 
     //Get the full monetary value (not including cents)
     public long getValue()
     {
-        return value - getPrecision();
+        return (value - getPrecision())/ 100;
     }
 
     //Get the cents of the monetary value
     public long getPrecision()
     {
-        return value & 99;
+        return value % 100;
     };
 
     /**
@@ -40,6 +42,6 @@ public class Currency {
 
     public Currency getPrecentage(int percentage)
     {
-        return new Currency(value / percentage);
+        return new Currency((int)((double)value /percentage * 100));
     }
 }
