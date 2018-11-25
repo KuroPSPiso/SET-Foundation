@@ -5,7 +5,7 @@ package com.capgemini.supermarket.payment;
  */
 public class Currency {
 
-    public static final Currency Zero = new Currency(0);
+    public static final Currency Zero(){ return new Currency(0); }
     private long value;
 
     //Get the full monetary value (not including cents)
@@ -36,7 +36,15 @@ public class Currency {
      */
     public Currency addValue(Currency additionalMonitaryValue)
     {
-        this.value += additionalMonitaryValue.value;
+        Currency currency = new Currency(this.value + additionalMonitaryValue.value);
+        this.value = currency.value;
+        return this;
+    }
+
+    public Currency subtractValue(Currency clearedMonitaryValue)
+    {
+        Currency currency = new Currency(this.value - clearedMonitaryValue.value);
+        this.value = currency.value;
         return this;
     }
 

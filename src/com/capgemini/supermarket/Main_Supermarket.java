@@ -18,8 +18,8 @@ public class Main_Supermarket {
                 long discountValue = 0;
                 int flaconDetection = 0;
                 int foundRobijn = 0;
-                Currency returnCurrency = Currency.Zero;
-                Currency robijnCurrency = Currency.Zero;
+                Currency robijnCurrency = Currency.Zero();
+                Currency returnCurrency = Currency.Zero();
                 for(Product product : products)
                 {
                     if(product.getName().toLowerCase().equals("flacon"))
@@ -54,7 +54,7 @@ public class Main_Supermarket {
             new Product("Flacon", new Currency(130))
     };
 
-    public static HashMap<Integer, Product> shoppingList;
+    public static HashMap<Integer, List<Product>> shoppingList;
 
     public static void main(String[] args) {
         //Data collection from io stream
@@ -75,21 +75,32 @@ public class Main_Supermarket {
             }
             System.out.println("Shopping cart:\n|Item                |price");
             if(shoppingList.size() > 0) {
-                Currency totalCost = Currency.Zero;
-                Currency totalCostReduction = Currency.Zero;
+                Currency totalCost = Currency.Zero();
+                Currency totalCostReduction = Currency.Zero();
                 Product[] cart = new Product[0];
-                cart = shoppingList.values().toArray(cart);
+                List<Product> subCart = new ArrayList<>();
+                for(List<Product> products : shoppingList.values())
+                {
+                    subCart.addAll(products);
+                }
+                cart = subCart.toArray(cart);
                 HashMap<String, Product> productHashMap = new HashMap<>();
                 for (int i = 0; i < cart.length; i++) {
                     //add a every unique item in the shopping cart to a hashmap as each product scans the shopping list. (without this every discount can be counted multiple times)
                     if(!productHashMap.containsKey(cart[i].getName().toLowerCase()))
                         productHashMap.put(cart[i].getName().toLowerCase(), cart[i]);
+
+                    String name = cart[i].getName();
+                    name = String.format("%s%"+ (20 - name.length()) + "s", name, "");
+                    System.out.println(String.format("%s|%d,%02d", name, cart[i].getValue().getValue(), cart[i].getValue().getPrecision()));
+                    totalCost.addValue(cart[i].getValue());
                 }
                 for(Product p : productHashMap.values())
                 {
-                    for(IDiscountFormat idf : p.getDiscounts())
-                    {
-                        totalCostReduction.addValue(idf.calculateDiscount(cart));
+                    if(p.getDiscounts() != null) {
+                        for (IDiscountFormat idf : p.getDiscounts()) {
+                            totalCostReduction.addValue(idf.calculateDiscount(cart));
+                        }
                     }
                 }
 
@@ -133,7 +144,15 @@ public class Main_Supermarket {
                 try {
                     int val = Integer.parseInt(split[1]);
                     if(val < stock.length && val >= 0)
-                        shoppingList.put(val, stock[val]);
+                    {
+                        List<Product> products = new ArrayList<>();
+                        if(shoppingList.get(val) != null)
+                        {
+                           products = shoppingList.get(val);
+                        }
+                        products.add(stock[val]);
+                        shoppingList.put(val, products);
+                    }
                     else
                         throw new Exception();
                 }catch (Exception ex)
@@ -148,7 +167,25 @@ public class Main_Supermarket {
             try {
                 int val = Integer.parseInt(split[1]);
                 if(val < stock.length && val >= 0)
-                    shoppingList.remove(val);
+                    if(shoppingList.containsKey(val))
+                    {
+                        List<Product> products = new ArrayList<>();
+                        if(shoppingList.get(val) != null)
+                        {
+                            products = shoppingList.get(val);
+                        }
+                        if(products.size() > 0) {
+                            products.remove(0); //same item, easily removable.
+                            if(products.size() > 0) {
+                                shoppingList.put(val, products);
+                            }
+                            else
+                            {
+                                shoppingList.remove(val);
+                            }
+                        }
+
+                    }
                 else
                     throw new Exception();
             }catch (Exception ex)
