@@ -5,6 +5,11 @@ public class CardIndex {
     int altNumber; //used for Ace which can be 1 or 11;
     String name;
 
+    public CardIndex(int number)
+    {
+        name = Integer.toString(number);
+    }
+
     public CardIndex(String name, int number)
     {
         this.name = name;

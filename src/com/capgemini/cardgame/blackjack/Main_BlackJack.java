@@ -2,18 +2,33 @@ package com.capgemini.cardgame.blackjack;
 
 import com.capgemini.calendar.CalendarFormatting;
 import com.capgemini.cardgame.cardset.Card;
+import com.capgemini.cardgame.cardset.CardIndex;
+import com.capgemini.cardgame.cardset.CardType;
 import com.sun.deploy.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main_BlackJack {
 
-    public static final Card[] blackJackDeck = {
-
-    };
+    public static List<Card> blackJackDeck;
 
 
     public static void main(String[] args) {
+        blackJackDeck = new ArrayList<>();
+        for(CardType type : CardType.values())
+        {
+            blackJackDeck.add(new Card(type, new CardIndex("Ace", 1, 11)));
+            blackJackDeck.add(new Card(type, new CardIndex("King", 10)));
+            blackJackDeck.add(new Card(type, new CardIndex("Queen", 10)));
+            blackJackDeck.add(new Card(type, new CardIndex("Bischop", 10)));
+            for(int pip = 0; pip < 10; pip++)
+            {
+                blackJackDeck.add(new Card(type, new CardIndex(pip)));
+            }
+        }
+
         //Data collection from io stream
         Scanner sc = new Scanner(System.in);
         //Boolean to create a looping cycle
