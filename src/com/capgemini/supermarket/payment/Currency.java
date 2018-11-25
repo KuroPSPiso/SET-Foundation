@@ -6,11 +6,13 @@ package com.capgemini.supermarket.payment;
 public class Currency {
     private long value;
 
+    //Get the full monetary value (not including cents)
     public long getValue()
     {
         return value - getPrecision();
     }
 
+    //Get the cents of the monetary value
     public long getPrecision()
     {
         return value & 99;
