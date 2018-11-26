@@ -5,9 +5,6 @@ import com.capgemini.supermarket.stock.Product;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static com.capgemini.supermarket.stock.Product.Stock;
 
 public class ShoppingCart {
 
@@ -54,5 +51,70 @@ public class ShoppingCart {
             }
 
         }
+    }
+
+    public Product[] getProductsInShoppingCart()
+    {
+        Product[] cart = new Product[0];
+        List<Product> subCart = new ArrayList<>();
+        for(List<Product> products : shoppingList.values())
+        {
+            subCart.addAll(products);
+        }
+        return cart = subCart.toArray(cart);
+    }
+
+    public Currency getSubTotalCost()
+    {
+        Currency totalCost = Currency.Zero();
+        Product[] cart = getProductsInShoppingCart();
+        for(int i = 0; i < cart.length; i++)
+            totalCost.addValue(cart[i].getValue());
+        return totalCost;
+    }
+
+    //A generated hashmap of every unique item in the shopping cart, as each product scans the shopping list. (without this every discount can be counted multiple times)
+    public HashMap<String, Product> getProductTypesInShoppingCart()
+    {
+        Product[] cart = getProductsInShoppingCart();
+        HashMap<String, Product> productHashMap = new HashMap<>();
+        for (int i = 0; i < cart.length; i++) {
+            if (!productHashMap.containsKey(cart[i].getName().toLowerCase()))
+                productHashMap.put(cart[i].getName().toLowerCase(), cart[i]);
+        }
+        return productHashMap;
+    }
+
+    public Currency getTotalCostReduction() {
+        Currency totalCostReduction = Currency.Zero();
+        HashMap<String, Product> productHashMap = getProductTypesInShoppingCart();
+        for(Product p : productHashMap.values())
+        {
+            if(p.getDiscounts() != null) {
+                for (IDiscountFormat idf : p.getDiscounts()) {
+                    totalCostReduction.addValue(idf.calculateDiscount(getProductsInShoppingCart()));
+                }
+            }
+        }
+        return totalCostReduction;
+    }
+
+    public Currency getTotalCost()
+    {
+        Currency totalCost = getSubTotalCost().subtractValue(getTotalCostReduction());
+        return totalCost;
+    }
+
+    public void clear() {
+        this.shoppingList.clear();
+    }
+
+    public boolean isEmptyOrNull()
+    {
+        if(this.shoppingList == null)
+            return true;
+        if(this.shoppingList.size() == 0)
+            return true;
+        return false;
     }
 }

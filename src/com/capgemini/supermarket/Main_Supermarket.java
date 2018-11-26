@@ -1,17 +1,9 @@
 package com.capgemini.supermarket;
 
-import com.capgemini.calendar.CalendarFormatting;
 import com.capgemini.supermarket.payment.Currency;
-import com.capgemini.supermarket.payment.IDiscountFormat;
 import com.capgemini.supermarket.payment.ShoppingCart;
 import com.capgemini.supermarket.stock.Product;
-import com.sun.deploy.util.StringUtils;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 
 import static com.capgemini.supermarket.stock.Product.Stock;
@@ -33,15 +25,16 @@ public class Main_Supermarket {
             printShoppingCart();
 
             //print question
-            System.out.println("write the following: 'add item', 'remove item', 'buy', or 'exit'");
+            System.out.println("write the following: 'add', 'remove', 'buy', or 'exit'");
             //get answer loop internally when failed
             failedReturn:
             for(;;) {
                 String data = sc.nextLine();
                 //expected result is either exit or a number so remove all spaces.
                 //try to parse to a number, if it fails check if it's equal to exit else return.
+                boolean requiresInputToContinue = false;
                 try {
-                    parse(data);
+                    requiresInputToContinue = parse(data);
                     break failedReturn;
                 } catch (ParseFormatException pfe) {
                     //check for exit else return
@@ -54,6 +47,12 @@ public class Main_Supermarket {
                         continue failedReturn;
                     }
                 }
+                finally {
+                    if(requiresInputToContinue) {
+                        System.out.println("Press Enter to Continue");
+                        sc.nextLine();
+                    }
+                }
             }
         }
     }
@@ -61,39 +60,17 @@ public class Main_Supermarket {
     private static void printShoppingCart() {
         System.out.println("Shopping cart:\nItem                |price");
         if(shoppingCart.getShoppingList().size() > 0) {
-            Currency totalCost = Currency.Zero();
-            Currency totalCostReduction = Currency.Zero();
-            Product[] cart = new Product[0];
-            List<Product> subCart = new ArrayList<>();
-            for(List<Product> products : shoppingCart.getShoppingList().values())
-            {
-                subCart.addAll(products);
-            }
-            cart = subCart.toArray(cart);
-            HashMap<String, Product> productHashMap = new HashMap<>();
+            Currency subTotalCost = shoppingCart.getSubTotalCost();
+            Currency totalCostReduction = shoppingCart.getTotalCostReduction();
+            Currency totalCost = shoppingCart.getTotalCost();
+            Product[] cart = shoppingCart.getProductsInShoppingCart();
             for (int i = 0; i < cart.length; i++) {
-                //add a every unique item in the shopping cart to a hashmap as each product scans the shopping list. (without this every discount can be counted multiple times)
-                if(!productHashMap.containsKey(cart[i].getName().toLowerCase()))
-                    productHashMap.put(cart[i].getName().toLowerCase(), cart[i]);
-
                 String name = cart[i].getName();
                 name = String.format("%s%"+ (20 - name.length()) + "s", name, "");
                 System.out.println(String.format("%s|%d,%02d", name, cart[i].getValue().getValue(), cart[i].getValue().getPrecision()));
-                totalCost.addValue(cart[i].getValue());
             }
-            for(Product p : productHashMap.values())
-            {
-                if(p.getDiscounts() != null) {
-                    for (IDiscountFormat idf : p.getDiscounts()) {
-                        totalCostReduction.addValue(idf.calculateDiscount(cart));
-                    }
-                }
-            }
-
-
             System.out.println(String.format("Discount: %d,%02d", totalCostReduction.getValue(), totalCostReduction.getPrecision()));
-            System.out.println(String.format("SubTotal: %d,%02d", totalCost.getValue(), totalCost.getPrecision()));
-            totalCost.subtractValue(totalCostReduction);
+            System.out.println(String.format("SubTotal: %d,%02d", subTotalCost.getValue(), subTotalCost.getPrecision()));
             System.out.println(String.format("Total  : %d,%02d", totalCost.getValue(), totalCost.getPrecision()));
 
         }else{
@@ -112,14 +89,23 @@ public class Main_Supermarket {
         }
     }
 
-    public static void parse(String data) throws ParseFormatException {
-        if(data.startsWith("add "))
+    public static boolean parse(String data) throws ParseFormatException {
+        if(data.equals("add") || data.startsWith("add "))
         {
-            String[] split = data.split(" ");
-            if(split.length >= 2)
+            String toConvert = null;
+            if(data.startsWith("add ")) {
+                String[] split = data.split(" ");
+                toConvert = split[1];
+            }
+            if(toConvert == null)
+            {
+                System.out.println("Enter the item number:");
+                toConvert = sc.nextLine();
+            }
+            if(toConvert != null)
             {
                 try {
-                    int val = Integer.parseInt(split[1]);
+                    int val = Integer.parseInt(toConvert);
                     if(val < Stock.length && val >= 0)
                     {
                         shoppingCart.addToShoppingCart(val, Stock[val]);
@@ -128,37 +114,68 @@ public class Main_Supermarket {
                         throw new Exception();
                 }catch (Exception ex)
                 {
-                    System.out.println("Please enter number of a item you want to add to the cart.");
+                    System.out.println("This item does not exist, please enter number of a item you want to add to the cart.");
                 }
             }
         }
         else if(data.startsWith("remove "))
         {
-            String[] split = data.split(" ");
-            try {
-                int val = Integer.parseInt(split[1]);
-                if(val < Stock.length && val >= 0)
-                    shoppingCart.removeFromShoppingCart(val);
-                else
-                    throw new Exception();
-            }catch (Exception ex)
+            String toConvert = null;
+            if(data.startsWith("remove ")) {
+                String[] split = data.split(" ");
+                toConvert = split[1];
+            }
+            if(toConvert == null)
             {
-                System.out.println("Please enter number of a item you want to add to the cart.");
+                System.out.println("Enter the item number:");
+                toConvert = sc.nextLine();
+            }
+            if(toConvert != null) {
+                try {
+                    int val = Integer.parseInt(toConvert);
+                    if (val < Stock.length && val >= 0)
+                        shoppingCart.removeFromShoppingCart(val);
+                    else
+                        throw new Exception();
+                } catch (Exception ex) {
+                    System.out.println("Please enter number of a item you want to add to the cart.");
+                }
             }
         }
-        else if(data.equals("buy"))
+        else if(data.equals("buy") || data.startsWith("buy "))
         {
             System.out.println("Enter amount to pay with (in cents):");
             try {
-                data = sc.next();
-                int val = Integer.parseInt(data);
+                String toConvert = null;
+                if(data.startsWith("buy "))
+                {
+                    String[] dataSplit = data.split(" ");
+                    toConvert = dataSplit[1];
+                }
+                if (toConvert == null){
+                    toConvert = sc.nextLine();
+                }
+                int val = Integer.parseInt(toConvert);
                 Currency paid = new Currency(val);
-                paid.subtractValue(Currency.Zero());
-                if(paid.getValue() * 100 + paid.getPrecision() > 0)
-                    //payed too little
+                Currency totalCost = shoppingCart.getTotalCost();
+                paid.subtractValue(totalCost);
+                if(paid.getValue() < 0 || paid.getPrecision() < 0) {
+                    //payed too little or value is negative.
                     System.out.println("decline payment");
+                    return true;
+                }
                 else {
-                    System.out.println(String.format("Payment paid, and refund is %d,%02d", paid.getValue(), paid.getPrecision()));
+                    System.out.println(
+                            String.format(
+                                    "%s, and the refund is %d,%02d",
+                                    shoppingCart.isEmptyOrNull()?"Customer with a empty shoppingcart has paid for nothing":"Customer has paid",
+                                    paid.getValue(),
+                                    paid.getPrecision()
+                            )
+                    );
+                    shoppingCart.clear();
+                    System.out.println("Next customer please...");
+                    return true;
                 }
 
             } catch (NumberFormatException nfe) {
@@ -169,5 +186,6 @@ public class Main_Supermarket {
         {
             throw new ParseFormatException();
         }
+        return false;
     }
 }
