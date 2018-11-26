@@ -7,7 +7,9 @@ public class CardIndex {
 
     public CardIndex(int number)
     {
-        name = Integer.toString(number);
+        this.name = Integer.toString(number);
+        this.number = number;
+        this.altNumber = number;
     }
 
     public CardIndex(String name, int number)

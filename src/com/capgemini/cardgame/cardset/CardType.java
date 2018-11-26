@@ -3,8 +3,8 @@ package com.capgemini.cardgame.cardset;
 public enum CardType {
     HEARTS('♥', "of Hearts"), CLUBS('♠', "of Clubs"), CLOVER('♣', "of Clovers"), DIAMOND('♦', "of Diamonds");
 
-    char character;
-    String value;
+    private char character;
+    private String value;
 
     CardType(char character, String value) {
         this.character = character;
