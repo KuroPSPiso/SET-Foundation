@@ -6,53 +6,17 @@ import com.capgemini.supermarket.payment.IDiscountFormat;
 import com.capgemini.supermarket.stock.Product;
 import com.sun.deploy.util.StringUtils;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.capgemini.supermarket.stock.Product.Stock;
+
 public class Main_Supermarket {
-    public static final Product[] stock ={
-            new Product("Robijn", new Currency(300), products -> {
-                //conditional
-                long discountValue = 0;
-                int flaconDetection = 0;
-                int foundRobijn = 0;
-                Currency robijnCurrency = Currency.Zero();
-                Currency returnCurrency = Currency.Zero();
-                for(Product product : products)
-                {
-                    if(product.getName().toLowerCase().equals("flacon"))
-                    {
-                        flaconDetection += 1;
-                    }
-                    if(product.getName().toLowerCase().equals("robijn"))
-                    {
-                        robijnCurrency = product.getValue();
-                        foundRobijn += 1;
-                    }
-                }
 
-                if(foundRobijn > 0)
-                {
-                    for(;foundRobijn > 0; foundRobijn--)
-                    {
-                        if(flaconDetection >= 2)
-                        {
-                            returnCurrency.addValue(robijnCurrency.getPrecentage(31));
-                            flaconDetection -= 2;
-                        }
-                    }
-                }
-
-                return returnCurrency;
-            }),
-            new Product("Brinta", new Currency(250)),
-            new Product("Chinese Groenten", new Currency(500)),
-            new Product("Kwark", new Currency(200)),
-            new Product("Luiers", new Currency(1000)),
-            new Product("Flacon", new Currency(130))
-    };
 
     public static HashMap<Integer, List<Product>> shoppingList;
 
@@ -65,15 +29,15 @@ public class Main_Supermarket {
         while(isRunning)
         {
             //print question
-            System.out.println("We currently have the following items in stock:\nItem no.\t|Item                |Price   |SALE");
-            for(int i = 0; i < stock.length; i++)
+            System.out.println("We currently have the following items in Stock:\nItem no.\t|Item                |Price   |SALE");
+            for(int i = 0; i < Stock.length; i++)
             {
-                Product p = stock[i];
+                Product p = Stock[i];
                 String name = p.getName();
                 name = String.format("%s%"+ (20 - name.length()) + "s", name, "");
                 System.out.println(String.format("%s\t\t\t|%s|%5d,%02d|", i, name, p.getValue().getValue(), p.getValue().getPrecision()));
             }
-            System.out.println("Shopping cart:\n|Item                |price");
+            System.out.println("Shopping cart:\nItem                |price");
             if(shoppingList.size() > 0) {
                 Currency totalCost = Currency.Zero();
                 Currency totalCostReduction = Currency.Zero();
@@ -104,8 +68,12 @@ public class Main_Supermarket {
                     }
                 }
 
+
                 System.out.println(String.format("Discount: %d,%02d", totalCostReduction.getValue(), totalCostReduction.getPrecision()));
-                System.out.println(String.format("Total   : %d,%02d", totalCost.getValue(), totalCost.getPrecision()));
+                System.out.println(String.format("SubTotal: %d,%02d", totalCost.getValue(), totalCost.getPrecision()));
+                totalCost.subtractValue(totalCostReduction);
+                System.out.println(String.format("Total  : %d,%02d", totalCost.getValue(), totalCost.getPrecision()));
+
             }else{
                 System.out.println("No items in shopping cart...");
             }
@@ -143,14 +111,14 @@ public class Main_Supermarket {
             {
                 try {
                     int val = Integer.parseInt(split[1]);
-                    if(val < stock.length && val >= 0)
+                    if(val < Stock.length && val >= 0)
                     {
                         List<Product> products = new ArrayList<>();
                         if(shoppingList.get(val) != null)
                         {
                            products = shoppingList.get(val);
                         }
-                        products.add(stock[val]);
+                        products.add(Stock[val]);
                         shoppingList.put(val, products);
                     }
                     else
@@ -166,7 +134,7 @@ public class Main_Supermarket {
             String[] split = data.split(" ");
             try {
                 int val = Integer.parseInt(split[1]);
-                if(val < stock.length && val >= 0)
+                if(val < Stock.length && val >= 0)
                     if(shoppingList.containsKey(val))
                     {
                         List<Product> products = new ArrayList<>();

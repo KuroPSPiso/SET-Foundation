@@ -50,6 +50,8 @@ public class Currency {
 
     public Currency getPrecentage(int percentage)
     {
-        return new Currency((int)((double)value /percentage * 100));
+        double result = 0;
+        Currency percentageOfCurrency = new Currency((int)(result = ((double)value / 100) * percentage));
+        return percentageOfCurrency;
     }
 }
