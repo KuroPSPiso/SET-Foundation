@@ -19,11 +19,12 @@ import static com.capgemini.supermarket.stock.Product.Stock;
 public class Main_Supermarket {
 
     private static ShoppingCart shoppingCart;
+    private static Scanner sc;
 
     public static void main(String[] args) {
         shoppingCart = new ShoppingCart();
         //Data collection from io stream
-        Scanner sc = new Scanner(System.in);
+        sc = new Scanner(System.in);
         //Boolean to create a looping cycle
         boolean isRunning = true;
         while(isRunning)
@@ -147,7 +148,22 @@ public class Main_Supermarket {
         }
         else if(data.equals("buy"))
         {
+            System.out.println("Enter amount to pay with (in cents):");
+            try {
+                data = sc.next();
+                int val = Integer.parseInt(data);
+                Currency paid = new Currency(val);
+                paid.subtractValue(Currency.Zero());
+                if(paid.getValue() * 100 + paid.getPrecision() > 0)
+                    //payed too little
+                    System.out.println("decline payment");
+                else {
+                    System.out.println(String.format("Payment paid, and refund is %d,%02d", paid.getValue(), paid.getPrecision()));
+                }
 
+            } catch (NumberFormatException nfe) {
+                System.out.println("Incorrect Input. Please enter a number of price");
+            }
         }
         else
         {

@@ -32,7 +32,7 @@ public class ShoppingCart {
         products.add(product);
         shoppingList.put(index, products);
     }
-    
+
     public void removeFromShoppingCart(int index)
     {
         if(shoppingList.containsKey(index))
