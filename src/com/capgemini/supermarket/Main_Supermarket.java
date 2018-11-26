@@ -3,6 +3,7 @@ package com.capgemini.supermarket;
 import com.capgemini.calendar.CalendarFormatting;
 import com.capgemini.supermarket.payment.Currency;
 import com.capgemini.supermarket.payment.IDiscountFormat;
+import com.capgemini.supermarket.payment.ShoppingCart;
 import com.capgemini.supermarket.stock.Product;
 import com.sun.deploy.util.StringUtils;
 
@@ -17,67 +18,20 @@ import static com.capgemini.supermarket.stock.Product.Stock;
 
 public class Main_Supermarket {
 
-
-    public static HashMap<Integer, List<Product>> shoppingList;
+    private static ShoppingCart shoppingCart;
 
     public static void main(String[] args) {
+        shoppingCart = new ShoppingCart();
         //Data collection from io stream
-        shoppingList = new HashMap<>();
         Scanner sc = new Scanner(System.in);
         //Boolean to create a looping cycle
         boolean isRunning = true;
         while(isRunning)
         {
+            printStockInformation();
+            printShoppingCart();
+
             //print question
-            System.out.println("We currently have the following items in Stock:\nItem no.\t|Item                |Price   |SALE");
-            for(int i = 0; i < Stock.length; i++)
-            {
-                Product p = Stock[i];
-                String name = p.getName();
-                name = String.format("%s%"+ (20 - name.length()) + "s", name, "");
-                System.out.println(String.format("%s\t\t\t|%s|%5d,%02d|", i, name, p.getValue().getValue(), p.getValue().getPrecision()));
-            }
-            System.out.println("Shopping cart:\nItem                |price");
-            if(shoppingList.size() > 0) {
-                Currency totalCost = Currency.Zero();
-                Currency totalCostReduction = Currency.Zero();
-                Product[] cart = new Product[0];
-                List<Product> subCart = new ArrayList<>();
-                for(List<Product> products : shoppingList.values())
-                {
-                    subCart.addAll(products);
-                }
-                cart = subCart.toArray(cart);
-                HashMap<String, Product> productHashMap = new HashMap<>();
-                for (int i = 0; i < cart.length; i++) {
-                    //add a every unique item in the shopping cart to a hashmap as each product scans the shopping list. (without this every discount can be counted multiple times)
-                    if(!productHashMap.containsKey(cart[i].getName().toLowerCase()))
-                        productHashMap.put(cart[i].getName().toLowerCase(), cart[i]);
-
-                    String name = cart[i].getName();
-                    name = String.format("%s%"+ (20 - name.length()) + "s", name, "");
-                    System.out.println(String.format("%s|%d,%02d", name, cart[i].getValue().getValue(), cart[i].getValue().getPrecision()));
-                    totalCost.addValue(cart[i].getValue());
-                }
-                for(Product p : productHashMap.values())
-                {
-                    if(p.getDiscounts() != null) {
-                        for (IDiscountFormat idf : p.getDiscounts()) {
-                            totalCostReduction.addValue(idf.calculateDiscount(cart));
-                        }
-                    }
-                }
-
-
-                System.out.println(String.format("Discount: %d,%02d", totalCostReduction.getValue(), totalCostReduction.getPrecision()));
-                System.out.println(String.format("SubTotal: %d,%02d", totalCost.getValue(), totalCost.getPrecision()));
-                totalCost.subtractValue(totalCostReduction);
-                System.out.println(String.format("Total  : %d,%02d", totalCost.getValue(), totalCost.getPrecision()));
-
-            }else{
-                System.out.println("No items in shopping cart...");
-            }
-
             System.out.println("write the following: 'add item', 'remove item', 'buy', or 'exit'");
             //get answer loop internally when failed
             failedReturn:
@@ -103,6 +57,60 @@ public class Main_Supermarket {
         }
     }
 
+    private static void printShoppingCart() {
+        System.out.println("Shopping cart:\nItem                |price");
+        if(shoppingCart.getShoppingList().size() > 0) {
+            Currency totalCost = Currency.Zero();
+            Currency totalCostReduction = Currency.Zero();
+            Product[] cart = new Product[0];
+            List<Product> subCart = new ArrayList<>();
+            for(List<Product> products : shoppingCart.getShoppingList().values())
+            {
+                subCart.addAll(products);
+            }
+            cart = subCart.toArray(cart);
+            HashMap<String, Product> productHashMap = new HashMap<>();
+            for (int i = 0; i < cart.length; i++) {
+                //add a every unique item in the shopping cart to a hashmap as each product scans the shopping list. (without this every discount can be counted multiple times)
+                if(!productHashMap.containsKey(cart[i].getName().toLowerCase()))
+                    productHashMap.put(cart[i].getName().toLowerCase(), cart[i]);
+
+                String name = cart[i].getName();
+                name = String.format("%s%"+ (20 - name.length()) + "s", name, "");
+                System.out.println(String.format("%s|%d,%02d", name, cart[i].getValue().getValue(), cart[i].getValue().getPrecision()));
+                totalCost.addValue(cart[i].getValue());
+            }
+            for(Product p : productHashMap.values())
+            {
+                if(p.getDiscounts() != null) {
+                    for (IDiscountFormat idf : p.getDiscounts()) {
+                        totalCostReduction.addValue(idf.calculateDiscount(cart));
+                    }
+                }
+            }
+
+
+            System.out.println(String.format("Discount: %d,%02d", totalCostReduction.getValue(), totalCostReduction.getPrecision()));
+            System.out.println(String.format("SubTotal: %d,%02d", totalCost.getValue(), totalCost.getPrecision()));
+            totalCost.subtractValue(totalCostReduction);
+            System.out.println(String.format("Total  : %d,%02d", totalCost.getValue(), totalCost.getPrecision()));
+
+        }else{
+            System.out.println("No items in shopping cart...");
+        }
+    }
+
+    private static void printStockInformation() {
+        System.out.println("We currently have the following items in Stock:\nItem no.\t|Item                |Price   |SALE");
+        for(int i = 0; i < Stock.length; i++)
+        {
+            Product p = Stock[i];
+            String name = p.getName();
+            name = String.format("%s%"+ (20 - name.length()) + "s", name, "");
+            System.out.println(String.format("%s\t\t\t|%s|%5d,%02d|", i, name, p.getValue().getValue(), p.getValue().getPrecision()));
+        }
+    }
+
     public static void parse(String data) throws ParseFormatException {
         if(data.startsWith("add "))
         {
@@ -113,13 +121,7 @@ public class Main_Supermarket {
                     int val = Integer.parseInt(split[1]);
                     if(val < Stock.length && val >= 0)
                     {
-                        List<Product> products = new ArrayList<>();
-                        if(shoppingList.get(val) != null)
-                        {
-                           products = shoppingList.get(val);
-                        }
-                        products.add(Stock[val]);
-                        shoppingList.put(val, products);
+                        shoppingCart.addToShoppingCart(val, Stock[val]);
                     }
                     else
                         throw new Exception();
@@ -135,25 +137,7 @@ public class Main_Supermarket {
             try {
                 int val = Integer.parseInt(split[1]);
                 if(val < Stock.length && val >= 0)
-                    if(shoppingList.containsKey(val))
-                    {
-                        List<Product> products = new ArrayList<>();
-                        if(shoppingList.get(val) != null)
-                        {
-                            products = shoppingList.get(val);
-                        }
-                        if(products.size() > 0) {
-                            products.remove(0); //same item, easily removable.
-                            if(products.size() > 0) {
-                                shoppingList.put(val, products);
-                            }
-                            else
-                            {
-                                shoppingList.remove(val);
-                            }
-                        }
-
-                    }
+                    shoppingCart.removeFromShoppingCart(val);
                 else
                     throw new Exception();
             }catch (Exception ex)

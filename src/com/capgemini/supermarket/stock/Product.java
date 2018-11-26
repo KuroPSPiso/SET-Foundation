@@ -52,32 +52,26 @@ public class Product {
                 //if it's wednesday, add the value over the current value to the return discount variable.
                 if(LocalDate.now().getDayOfWeek() == DayOfWeek.WEDNESDAY)
                     for(Product p : products)
-                    {
                         if(p.getName().toLowerCase().equals("kwark"))
-                        {
                             returnDiscount.addValue(new Currency(p.getValue().getValue() * 100 - p.getValue().getPrecision() - 100));
-                        }
-                    }
+
                 return returnDiscount;
             }),
             new Product("Luiers", new Currency(1000), products -> {
                 Currency returnDiscount = Currency.Zero();
                 int diaperCount = 0;
                 Product diaper = null;
-                for(Product p : products){
+                for(Product p : products)
                     if(p.getName().toLowerCase().equals("luiers")) {
                         diaperCount++;
                         diaper = p;
                     }
-                }
                 if(diaperCount >=4)
-                {
                     diaperCount /= 4; //for every 4 packs of diapers, 1 is free.
-                }
+                else
+                    diaperCount = 0; //if unable to divide set the count to 0 (reusing the variable)
                 for(; diaperCount > 0; diaperCount--)
-                {
                     returnDiscount.addValue(diaper.getValue());
-                }
 
                 return returnDiscount;
             }),
