@@ -71,6 +71,6 @@ public class Player {
             score = String.format("%d or %d", getScore(), getAltScore());
         else
             score = Integer.toString(getScore());
-        return String.format("%s has:\n%s\npoints:%s", this.name, s, score);
+        return String.format("%s has:\n%s\npoints: %s", this.name, s, score);
     }
 }

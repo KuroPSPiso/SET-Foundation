@@ -25,7 +25,7 @@ public class Main_BlackJack {
             blackJackDeck.add(new Card(type, new CardIndex("King", 10)));
             blackJackDeck.add(new Card(type, new CardIndex("Queen", 10)));
             blackJackDeck.add(new Card(type, new CardIndex("Bischop", 10)));
-            for(int pip = 1; pip < 10; pip++)
+            for(int pip = 2; pip <= 10; pip++) //2-10
             {
                 blackJackDeck.add(new Card(type, new CardIndex(pip)));
             }
@@ -52,9 +52,22 @@ public class Main_BlackJack {
         boolean isRunning = true;
         while(isRunning)
         {
-            //print question
-            System.out.println(dealer.toString());
-            System.out.println(player.toString());
+            //print score
+            printScoreBoard(player, dealer);
+
+            if(player.getAltScore() == 21 || player.getScore() == 21)
+            {
+                System.out.println("you won");
+                isRunning = false;
+                break;
+            }
+            if(dealer.getAltScore() == 21 || dealer.getScore() == 21)
+            {
+                System.out.println("you won");
+                isRunning = false;
+                break;
+            }
+
             //get answer loop internally when failed
             failedReturn:
             for(;;) {
@@ -67,15 +80,66 @@ public class Main_BlackJack {
                     if(player.isBust())
                     {
                         System.out.println("Bust");
-                        isRunning = false;
+                        isRunning = false; //exit program if bust (can change to play again or something)
                     }
                 }
                 else if(data.toLowerCase().equals("keep"))
                 {
+                    //check if lost by not looking at the score
+                    if(
+                        player.getScore() < dealer.getScore() &&
+                        player.getScore() < dealer.getAltScore() &&
+                        player.getAltScore() < dealer.getScore() &&
+                        player.getAltScore() < dealer.getAltScore()
+                    )
+                    {
+                        System.out.println("You lost");
+                        isRunning = false;
+                        break failedReturn;
+                    }
+
+                    while(
+                        (dealer.getScore() < 17 || dealer.getAltScore() < 17) ||
+                        (player.getScore() <= 21 && (dealer.getScore() < player.getScore()) || dealer.getAltScore() < player.getScore())||
+                        (player.getAltScore() <= 21 && (dealer.getScore() < player.getAltScore()) || dealer.getAltScore() < player.getAltScore())
+                    )
+                    {
+                        dealer.hit(getRandomCardFromDeck());
+                        printScoreBoard(player, dealer);
+                        if(dealer.isBust())
+                        {
+                            System.out.println("You won");
+                            isRunning = false;
+                            break failedReturn;
+                        }
+                    }
+                    //check if draw
+                    if(
+                            player.getScore() == dealer.getScore() ||
+                            player.getScore() == dealer.getAltScore() ||
+                            player.getAltScore() == dealer.getScore() ||
+                            player.getAltScore() == dealer.getAltScore()
+                    )
+                    {
+                        System.out.println("Draw house lost.");
+                    }
+                    //check if lost
+                    if(
+                            player.getScore() < dealer.getScore() &&
+                                    player.getScore() < dealer.getAltScore() &&
+                                    player.getAltScore() < dealer.getScore() &&
+                                    player.getAltScore() < dealer.getAltScore()
+                    )
+                    {
+                        System.out.println("You lost");
+                        isRunning = false;
+                        break failedReturn;
+                    }
                 }
                 //check for exit else return
                 else if (data.equals("exit")) {
                     isRunning = false;
+                    break failedReturn;
                 }
                 else
                 {
@@ -84,5 +148,13 @@ public class Main_BlackJack {
                 break failedReturn;
             }
         }
+    }
+
+    private static void printScoreBoard(Player player, Player dealer) {
+        System.out.println("-------------------------");
+        System.out.println(dealer.toString());
+        System.out.println();
+        System.out.println(player.toString());
+        System.out.println();
     }
 }

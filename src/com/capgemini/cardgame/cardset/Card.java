@@ -35,6 +35,6 @@ public class Card {
 
     @Override
     public String toString() {
-        return cardIndex.name + cardType.getValue();
+        return String.format("%s %s(%c)", cardIndex.name, cardType.getValue(), cardType.getCharacter());
     }
 }
